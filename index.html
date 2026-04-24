@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -288,7 +287,7 @@
     .status-message.error { color: var(--danger); }
     .status-message.success { color: var(--success); }
 
-    .info-box, .safe-box {
+    .info-box, .safe-box, .workflow-box {
       margin-top: 18px;
       padding: 14px 16px;
       border-radius: 16px;
@@ -301,6 +300,10 @@
 
     .safe-box {
       background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(242,248,255,0.92));
+    }
+
+    .workflow-box {
+      background: linear-gradient(180deg, rgba(247,251,255,0.94), rgba(235,245,255,0.92));
     }
 
     .helper-list {
@@ -450,6 +453,13 @@
       line-height: 1.7;
     }
 
+    code {
+      background: rgba(241, 247, 255, 0.95);
+      padding: 2px 6px;
+      border-radius: 8px;
+      border: 1px solid rgba(197, 214, 238, 0.45);
+    }
+
     @media (max-width: 980px) {
       .hero-grid {
         grid-template-columns: 1fr;
@@ -479,45 +489,41 @@
       }
     }
   </style>
+  <title>Refund Status Portal</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <nav class="navbar">
-    <div class="brand">
       <div class="brand-mark" aria-hidden="true"></div>
       <div class="brand-text">
         <div class="logo">Refund Status</div>
         <div class="logo-sub">Assessment Year Companion</div>
+        <div class="logo-sub">Client Access Portal</div>
       </div>
     </div>
     <div class="nav-right">
-      <div class="nav-pill">No credentials stored</div>
+      <div class="nav-pill">Useful without storing credentials</div>
+      <a class="nav-pill" href="office.html">Office Staff Login</a>
     </div>
   </nav>
 
-  <main class="container">
-    <div class="hero-grid">
       <section class="panel">
         <div class="section-head">
           <div class="section-head-left">
             <h1>Check Return Status</h1>
-            <div class="subtle">A safe frontend using your preferred visual style. It guides the user to the official portal instead of collecting Income Tax login credentials in this page.</div>
+            <div class="subtle">This version is designed to work together with the official portal. The client logs in only on the Income Tax website, and your companion page turns the extracted result into a clear, client-friendly status explanation.</div>
+            <h1>Track Your Refund</h1>
+            <div class="subtle">Enter PAN and assessment year to fetch the latest office-published status from the central dataset.</div>
           </div>
           <div class="chip">AY 2020-21 to 2026-27</div>
+          <div class="chip">Firebase-backed</div>
         </div>
 
         <form id="statusForm">
+        <form id="clientLookupForm">
           <label for="pan">PAN</label>
           <input id="pan" name="pan" type="text" maxlength="10" placeholder="ABCDE1234F" autocomplete="off">
 
-          <label for="assessmentYear">Assessment Year</label>
-          <select id="assessmentYear" name="assessmentYear">
-            <option value="">Select assessment year</option>
-            <option value="2020-21">AY 2020-21</option>
-            <option value="2021-22">AY 2021-22</option>
-            <option value="2022-23">AY 2022-23</option>
-            <option value="2023-24">AY 2023-24</option>
-            <option value="2024-25">AY 2024-25</option>
-            <option value="2025-26">AY 2025-26</option>
             <option value="2026-27">AY 2026-27</option>
           </select>
 
@@ -536,80 +542,107 @@
           <div class="btn-row">
             <button class="btn-primary" type="submit">Generate status response</button>
             <a class="btn-secondary" href="https://eportal.incometax.gov.in/iec/foservices/#/login" target="_blank" rel="noreferrer">Open official e-Filing portal</a>
+            <button class="btn-primary" type="submit">Check status</button>
+            <button class="btn-secondary" type="button" id="sampleFillBtn">Use sample PAN</button>
           </div>
         </form>
 
         <div id="formMessage" class="status-message" aria-live="polite"></div>
+        <div id="lookupMessage" class="status-message" aria-live="polite"></div>
+
+        <div class="workflow-box">
+          <strong>How this becomes useful:</strong>
+          <ul class="helper-list">
+            <li>The client signs in on the official Income Tax portal only.</li>
+            <li>A browser extension reads the filed-return page after login and extracts only PAN, AY, status, and date.</li>
+            <li>The extension opens this webpage and auto-fills the result summary for the client-facing response.</li>
+          </ul>
+        </div>
 
         <div class="safe-box">
-          <strong>Safer implementation approach:</strong>
+          <strong>Why this is safer:</strong>
+          <strong>How this works:</strong>
           <ul class="helper-list">
-            <li>This page does not ask for or relay the e-Filing password.</li>
-            <li>The user logs in directly on the official Income Tax portal in a separate tab.</li>
-            <li>After checking the return status there, the captured status and last updated date are entered here for a polished dynamic explanation.</li>
+            <li>No password field exists on your webpage.</li>
+            <li>No credential relay or third-party login automation is used.</li>
+            <li>Your product still adds value through extraction, formatting, explanation, and presentation.</li>
+            <li>Office staff upload the latest Excel on the secure office page.</li>
+            <li>The workbook is parsed and its rows are published into Firebase Firestore.</li>
+            <li>This client page queries the latest centralized record by PAN and assessment year.</li>
           </ul>
         </div>
       </section>
-
       <section class="panel result-shell">
         <div class="section-head">
           <div class="section-head-left">
             <h2>Dynamic Result</h2>
-            <div class="subtle">The copy below changes based on the selected status and assessment year.</div>
+            <div class="subtle">The page supports both manual entry and extension-driven auto-fill through URL parameters.</div>
+            <h2>Status Summary</h2>
+            <div class="subtle">A cleaner, client-friendly explanation generated from the uploaded office dataset.</div>
           </div>
-          <div class="chip">User-facing summary</div>
+          <div class="chip">Client-facing summary</div>
+          <div id="dataSourceChip" class="chip">Awaiting lookup</div>
         </div>
 
         <div id="emptyState" class="empty-state">
-          Enter the PAN, choose the assessment year, select the captured portal status, and add the last updated date to generate the response.
+          Either enter the details manually or arrive here from the extension with a URL like
+          <br>
+          <code>?pan=ABCDE1234F&amp;ay=2025-26&amp;status=processing&amp;date=2025-11-13</code>
+          Enter the PAN and assessment year to fetch the latest published refund record.
         </div>
 
         <article id="resultCard" class="status-card" aria-live="polite">
           <div class="status-card-head">
             <div>
               <div class="subtle">Return Summary</div>
+              <div class="subtle">Refund Record</div>
               <h3 id="resultTitle">AY 2025-26</h3>
             </div>
             <div id="resultBadge" class="badge processing">Under processing</div>
+            <div id="resultBadge" class="badge unknown">Status pending</div>
           </div>
 
           <div class="status-card-body">
-            <div id="resultSummary" class="status-summary"></div>
 
             <div class="facts">
               <div class="fact">
                 <div class="fact-label">PAN</div>
                 <div id="factPan" class="fact-value">ABCDE1234F</div>
+                <div class="fact-label">Client Name</div>
+                <div id="factName" class="fact-value">-</div>
               </div>
               <div class="fact">
                 <div class="fact-label">Assessment Year</div>
                 <div id="factAy" class="fact-value">2025-26</div>
+                <div class="fact-label">PAN</div>
+                <div id="factPan" class="fact-value">-</div>
               </div>
               <div class="fact">
                 <div class="fact-label">Portal Status</div>
                 <div id="factStatus" class="fact-value">Under processing</div>
+                <div class="fact-label">Code No</div>
+                <div id="factCode" class="fact-value">-</div>
               </div>
               <div class="fact">
                 <div class="fact-label">Last Updated</div>
                 <div id="factUpdated" class="fact-value">13 Nov 2025</div>
+                <div class="fact-label">Refund Amount</div>
+                <div id="factRefund" class="fact-value">-</div>
               </div>
             </div>
 
-            <div>
-              <h3>What this usually means</h3>
-              <div id="timeline" class="timeline"></div>
-            </div>
-          </div>
         </article>
 
         <div class="info-box">
-          You can later replace the manual status picker with a secure backend integration only if the official portal provides an approved API or authorization flow for third-party access.
+          The included extension uses DOM extraction on the official portal after the user is already authenticated there. If the portal layout changes later, the extraction selectors may need a small update.
+          <strong>Dataset freshness:</strong>
+          <span id="datasetMetaText">Waiting for latest dataset metadata.</span>
         </div>
       </section>
     </div>
 
     <div class="footer-note">
-      This sample is suitable for GitHub Pages because it is a plain static site. If you want, we can later upgrade it into a React or Next.js app with the same styling.
+      This setup is suitable for GitHub Pages for the website, plus a locally loaded Chrome extension for extraction on the official portal.
     </div>
   </main>
 
@@ -709,6 +742,55 @@
       });
     }
 
+    function renderResult(pan, assessmentYear, status, lastUpdated) {
+      const config = statusConfig[status];
+      const formattedDate = formatDate(lastUpdated);
+
+      resultTitle.textContent = `AY ${assessmentYear}`;
+      resultBadge.textContent = config.label;
+      resultBadge.className = `badge ${config.badgeClass}`;
+      resultSummary.textContent = config.summary(pan, assessmentYear, formattedDate);
+      factPan.textContent = pan;
+      factAy.textContent = `AY ${assessmentYear}`;
+      factStatus.textContent = config.label;
+      factUpdated.textContent = formattedDate;
+
+      buildTimeline(config.timeline);
+
+      emptyState.style.display = "none";
+      resultCard.classList.add("active");
+    }
+
+    function setFormValues(pan, assessmentYear, status, lastUpdated) {
+      document.getElementById("pan").value = pan;
+      document.getElementById("assessmentYear").value = assessmentYear;
+      document.getElementById("statusInput").value = status;
+      document.getElementById("lastUpdated").value = lastUpdated;
+    }
+
+    function parseParamsAndAutofill() {
+      const params = new URLSearchParams(window.location.search);
+      const pan = (params.get("pan") || "").trim().toUpperCase();
+      const assessmentYear = (params.get("ay") || "").trim();
+      const status = (params.get("status") || "").trim();
+      const lastUpdated = (params.get("date") || "").trim();
+
+      if (!pan || !assessmentYear || !status || !lastUpdated) {
+        return;
+      }
+
+      if (!panLooksValid(pan) || !statusConfig[status]) {
+        formMessage.className = "status-message error";
+        formMessage.textContent = "The auto-filled data in the URL was incomplete or invalid.";
+        return;
+      }
+
+      setFormValues(pan, assessmentYear, status, lastUpdated);
+      renderResult(pan, assessmentYear, status, lastUpdated);
+      formMessage.className = "status-message success";
+      formMessage.textContent = "Status imported automatically from the companion extension.";
+    }
+
     form.addEventListener("submit", (event) => {
       event.preventDefault();
 
@@ -729,25 +811,13 @@
         return;
       }
 
-      const config = statusConfig[status];
-      const formattedDate = formatDate(lastUpdated);
-
-      resultTitle.textContent = `AY ${assessmentYear}`;
-      resultBadge.textContent = config.label;
-      resultBadge.className = `badge ${config.badgeClass}`;
-      resultSummary.textContent = config.summary(pan, assessmentYear, formattedDate);
-      factPan.textContent = pan;
-      factAy.textContent = `AY ${assessmentYear}`;
-      factStatus.textContent = config.label;
-      factUpdated.textContent = formattedDate;
-
-      buildTimeline(config.timeline);
-
-      emptyState.style.display = "none";
-      resultCard.classList.add("active");
+      renderResult(pan, assessmentYear, status, lastUpdated);
       formMessage.className = "status-message success";
       formMessage.textContent = "Dynamic response generated successfully.";
     });
+
+    parseParamsAndAutofill();
   </script>
+  <script type="module" src="client.js"></script>
 </body>
 </html>
