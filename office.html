@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Office Upload Portal</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <nav class="navbar">
+    <div class="brand">
+      <div class="brand-mark" aria-hidden="true"></div>
+      <div class="brand-text">
+        <div class="logo">Refund Status</div>
+        <div class="logo-sub">Office Upload Portal</div>
+      </div>
+    </div>
+    <div class="nav-right">
+      <a class="nav-pill" href="index.html">Client Portal</a>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="hero-grid">
+      <section class="panel">
+        <div class="section-head">
+          <div class="section-head-left">
+            <h1>Office Staff Login</h1>
+            <div class="subtle">Authenticate with Firebase email/password login, then upload the latest workbook to publish client lookup records.</div>
+          </div>
+          <div class="chip">Staff only</div>
+        </div>
+
+        <form id="loginForm">
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="staff@example.com" autocomplete="username">
+
+          <label for="password">Password</label>
+          <input id="password" name="password" type="password" placeholder="Enter password" autocomplete="current-password">
+
+          <div class="btn-row">
+            <button class="btn-primary" type="submit">Sign in</button>
+            <button class="btn-secondary hidden" type="button" id="logoutBtn">Sign out</button>
+          </div>
+        </form>
+
+        <div id="authMessage" class="status-message" aria-live="polite"></div>
+
+        <div class="safe-box">
+          <strong>Important:</strong>
+          <ul class="helper-list">
+            <li>This login is for office staff only and uses Firebase Authentication, not client tax credentials.</li>
+            <li>Client data lives in Firestore as uploaded office records.</li>
+            <li>Set strict Firebase Auth and Firestore rules before going live.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="panel result-shell">
+        <div class="section-head">
+          <div class="section-head-left">
+            <h2>Upload Workbook</h2>
+            <div class="subtle">The sample workbook format detected is: <code>S.No</code>, <code>Code No</code>, <code>Name</code>, <code>PAN No</code>, <code>Refund</code>, <code>Refund Status</code>.</div>
+          </div>
+          <div id="sessionChip" class="chip">Signed out</div>
+        </div>
+
+        <div id="uploadShell" class="hidden">
+          <label for="uploadAssessmentYear">Assessment Year</label>
+          <select id="uploadAssessmentYear">
+            <option value="2020-21">AY 2020-21</option>
+            <option value="2021-22">AY 2021-22</option>
+            <option value="2022-23">AY 2022-23</option>
+            <option value="2023-24">AY 2023-24</option>
+            <option value="2024-25">AY 2024-25</option>
+            <option value="2025-26" selected>AY 2025-26</option>
+            <option value="2026-27">AY 2026-27</option>
+          </select>
+
+          <label for="excelFile">Upload Excel sheet</label>
+          <input id="excelFile" type="file" accept=".xlsx,.xls">
+
+          <div class="btn-row">
+            <button id="previewBtn" class="btn-primary" type="button">Preview workbook</button>
+            <button id="publishBtn" class="btn-secondary" type="button">Publish to Firebase</button>
+          </div>
+
+          <div id="uploadMessage" class="status-message" aria-live="polite"></div>
+
+          <div class="stats-grid">
+            <div class="fact">
+              <div class="fact-label">Parsed Rows</div>
+              <div id="parsedRows" class="fact-value">0</div>
+            </div>
+            <div class="fact">
+              <div class="fact-label">With Status</div>
+              <div id="statusRows" class="fact-value">0</div>
+            </div>
+            <div class="fact">
+              <div class="fact-label">Assessment Year</div>
+              <div id="parsedAy" class="fact-value">-</div>
+            </div>
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>PAN</th>
+                  <th>Code No</th>
+                  <th>Refund</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody id="previewTableBody">
+                <tr>
+                  <td colspan="5" class="subtle">Upload a workbook to preview the first few rows.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div id="signedOutState" class="empty-state">
+          Sign in with the office staff account before uploading the workbook.
+        </div>
+
+        <div class="workflow-box">
+          <strong>Recommended Firebase setup:</strong>
+          <ul class="helper-list">
+            <li>Enable Email/Password sign-in in Firebase Authentication.</li>
+            <li>Create office staff users in Firebase Auth.</li>
+            <li>Allow writes only for authenticated office users in Firestore rules.</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script type="module" src="office.js"></script>
+</body>
+</html>
