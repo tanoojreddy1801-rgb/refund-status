@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Refund Status Companion",
+  "version": "1.0.0",
+  "description": "Extracts non-sensitive filed return status details from the official Income Tax portal and opens the companion webpage.",
+  "permissions": ["activeTab", "tabs"],
+  "host_permissions": [
+    "https://eportal.incometax.gov.in/*"
+  ],
+  "action": {
+    "default_title": "Refund Status Companion",
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://eportal.incometax.gov.in/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
