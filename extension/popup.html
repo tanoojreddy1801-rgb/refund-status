@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Refund Status Companion</title>
+  <style>
+    body {
+      margin: 0;
+      width: 340px;
+      font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+      background: linear-gradient(180deg, #f8fbff, #eef5ff);
+      color: #24324a;
+    }
+
+    .shell {
+      padding: 18px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(186, 205, 232, 0.5);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 12px 28px rgba(122, 152, 199, 0.12);
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 20px;
+    }
+
+    p {
+      margin: 0 0 14px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: #60708d;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    select, button {
+      width: 100%;
+      font: inherit;
+      border-radius: 14px;
+    }
+
+    select {
+      height: 44px;
+      border: 1px solid rgba(190, 208, 233, 0.7);
+      background: #fff;
+      margin-bottom: 12px;
+      padding: 0 12px;
+    }
+
+    button {
+      height: 44px;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 700;
+      background: linear-gradient(135deg, #5b8def, #78adff);
+      box-shadow: 0 8px 20px rgba(122, 152, 199, 0.18);
+    }
+
+    .result {
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(247, 250, 255, 0.96);
+      border: 1px solid rgba(197, 214, 238, 0.55);
+      font-size: 12px;
+      line-height: 1.6;
+      white-space: pre-line;
+    }
+
+    .error {
+      color: #c45d73;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="card">
+      <h1>Refund Status</h1>
+      <p>Open the official Income Tax portal, navigate to View Filed Returns, choose an assessment year here, and extract the latest status.</p>
+
+      <label for="assessmentYear">Assessment year</label>
+      <select id="assessmentYear">
+        <option value="2020-21">AY 2020-21</option>
+        <option value="2021-22">AY 2021-22</option>
+        <option value="2022-23">AY 2022-23</option>
+        <option value="2023-24">AY 2023-24</option>
+        <option value="2024-25">AY 2024-25</option>
+        <option value="2025-26" selected>AY 2025-26</option>
+        <option value="2026-27">AY 2026-27</option>
+      </select>
+
+      <button id="extractBtn" type="button">Extract and open webpage</button>
+
+      <div id="result" class="result">No extraction yet.</div>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>
