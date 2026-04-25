@@ -11,7 +11,6 @@ import {
   doc,
   collection,
   query,
-  where,
   getDocs,
   serverTimestamp,
   setDoc
@@ -112,6 +111,7 @@ function parseWorkbook(file, assessmentYear) {
 
         const headers = rows[headerRowIndex].map((value) => String(value).trim());
         const dataRows = rows.slice(headerRowIndex + 1);
+
         const records = dataRows
           .filter((row) => row.some((cell) => String(cell).trim() !== ""))
           .map((row) => {
@@ -119,6 +119,7 @@ function parseWorkbook(file, assessmentYear) {
             headers.forEach((header, index) => {
               obj[header] = row[index];
             });
+
             return {
               assessmentYear,
               serialNo: obj["S.No"] ? Number(obj["S.No"]) : null,
@@ -137,16 +138,40 @@ function parseWorkbook(file, assessmentYear) {
         reject(error);
       }
     };
+
     reader.onerror = () => reject(new Error("Could not read the workbook file."));
     reader.readAsArrayBuffer(file);
   });
 }
 
+function getFriendlyFirebaseError(error) {
+  const code = error?.code || "";
+
+  if (code === "permission-denied" || code === "firestore/permission-denied") {
+    return "Publishing failed because Firestore is blocking write access. Update your Firestore rules to allow authenticated office staff to write.";
+  }
+
+  if (code === "unauthenticated" || code === "firestore/unauthenticated") {
+    return "Publishing failed because the Firebase session is not authenticated. Sign in again and retry.";
+  }
+
+  if (code === "auth/invalid-credential") {
+    return "Sign-in failed because the email or password is invalid.";
+  }
+
+  if (code === "auth/user-not-found") {
+    return "Sign-in failed because this Firebase user does not exist yet.";
+  }
+
+  if (code === "auth/wrong-password") {
+    return "Sign-in failed because the password is incorrect.";
+  }
+
+  return error?.message || "An unexpected Firebase error occurred.";
+}
+
 async function publishRecords(records, userEmail, assessmentYear) {
-  const existingQuery = query(
-    collection(db, FIRESTORE_COLLECTION),
-    where("assessmentYear", "==", assessmentYear)
-  );
+  const existingQuery = query(collection(db, FIRESTORE_COLLECTION));
   const existingSnap = await getDocs(existingQuery);
 
   if (!existingSnap.empty) {
@@ -169,6 +194,7 @@ async function publishRecords(records, userEmail, assessmentYear) {
       const safeCode = (record.codeNo || "no-code").replace(/[^A-Z0-9-]/gi, "");
       const docId = `${assessmentYear}_${safePan}_${safeCode}`;
       const ref = doc(collection(db, FIRESTORE_COLLECTION), docId);
+
       batch.set(ref, {
         ...record,
         uploadedBy: userEmail,
@@ -202,7 +228,7 @@ loginForm.addEventListener("submit", async (event) => {
     loginForm.reset();
   } catch (error) {
     authMessage.className = "status-message error";
-    authMessage.textContent = `Sign-in failed: ${error.message}`;
+    authMessage.textContent = getFriendlyFirebaseError(error);
   }
 });
 
@@ -257,13 +283,13 @@ publishBtn.addEventListener("click", async () => {
 
   try {
     uploadMessage.className = "status-message warning";
-    uploadMessage.textContent = "Publishing records to Firebase...";
+    uploadMessage.textContent = "Publishing records to Firebase and replacing the existing dataset...";
     await publishRecords(parsedDataset, user.email || "office-user", assessmentYear);
     uploadMessage.className = "status-message success";
-    uploadMessage.textContent = `Published ${parsedDataset.length} records to Firebase successfully.`;
+    uploadMessage.textContent = `Published ${parsedDataset.length} records to Firebase successfully and replaced the previous dataset.`;
   } catch (error) {
     uploadMessage.className = "status-message error";
-    uploadMessage.textContent = `Publishing failed: ${error.message}`;
+    uploadMessage.textContent = getFriendlyFirebaseError(error);
   }
 });
 
