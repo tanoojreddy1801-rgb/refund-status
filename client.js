@@ -33,7 +33,7 @@ const uiText = {
   en: {
     pageTitle: "Track Your Refund",
     pageSubtitle: "Enter PAN and assessment year to fetch the latest office-published status from the central dataset.",
-    backendChip: "Firebase-backed",
+    backendChip: "Updated on real-time",
     languageTitle: "Choose Language",
     languageSubtitle: "Switch the client portal between English, Kannada, Telugu, and Hindi.",
     panLabel: "PAN",
