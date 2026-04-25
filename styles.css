@@ -61,7 +61,7 @@ body {
 }
 
 .brand-mark::after {
-  content: "RS";
+  content: "";
   position: absolute;
   inset: 0;
   display: grid;
