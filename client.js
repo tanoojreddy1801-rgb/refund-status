@@ -76,7 +76,7 @@ const uiText = {
   kn: {
     pageTitle: "ನಿಮ್ಮ ಮರುಪಾವತಿಯನ್ನು ಪರಿಶೀಲಿಸಿ",
     pageSubtitle: "ಇತ್ತೀಚಿನ ಕಚೇರಿ ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ಸ್ಥಿತಿಯನ್ನು ಪಡೆಯಲು PAN ಮತ್ತು ಮೌಲ್ಯಮಾಪನ ವರ್ಷವನ್ನು ನಮೂದಿಸಿ.",
-    backendChip: "ರಿಯಲ್-ಟೈಮ್‌ನಲ್ಲಿ ನವೀಕರಿಸಲಾಗಿದೆ",
+    backendChip: "ರಿಯಲ್-ಟೈಮ್ ನವೀಕರಣ",
     languageTitle: "ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ",
     languageSubtitle: "ಕ್ಲೈಂಟ್ ಪೋರ್ಟಲ್ ಅನ್ನು English, Kannada, Telugu ಮತ್ತು Hindi ನಡುವೆ ಬದಲಾಯಿಸಿ.",
     panLabel: "PAN",
