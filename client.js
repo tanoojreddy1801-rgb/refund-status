@@ -76,7 +76,7 @@ const uiText = {
   kn: {
     pageTitle: "ನಿಮ್ಮ ಮರುಪಾವತಿಯನ್ನು ಪರಿಶೀಲಿಸಿ",
     pageSubtitle: "ಇತ್ತೀಚಿನ ಕಚೇರಿ ಅಪ್‌ಲೋಡ್ ಮಾಡಿದ ಸ್ಥಿತಿಯನ್ನು ಪಡೆಯಲು PAN ಮತ್ತು ಮೌಲ್ಯಮಾಪನ ವರ್ಷವನ್ನು ನಮೂದಿಸಿ.",
-    backendChip: "Firebase ಆಧಾರಿತ",
+    backendChip: "ರಿಯಲ್-ಟೈಮ್‌ನಲ್ಲಿ ನವೀಕರಿಸಲಾಗಿದೆ",
     languageTitle: "ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ",
     languageSubtitle: "ಕ್ಲೈಂಟ್ ಪೋರ್ಟಲ್ ಅನ್ನು English, Kannada, Telugu ಮತ್ತು Hindi ನಡುವೆ ಬದಲಾಯಿಸಿ.",
     panLabel: "PAN",
@@ -119,7 +119,7 @@ const uiText = {
   te: {
     pageTitle: "మీ రిఫండ్‌ను ట్రాక్ చేయండి",
     pageSubtitle: "కేంద్రీకృత డేటాసెట్ నుండి తాజా కార్యాలయ స్థితిని పొందడానికి PAN మరియు అసెస్‌మెంట్ ఇయర్ నమోదు చేయండి.",
-    backendChip: "Firebase ఆధారితం",
+    backendChip: "రియల్ టైమ్‌లో నవీకరించబడింది",
     languageTitle: "భాషను ఎంచుకోండి",
     languageSubtitle: "క్లయింట్ పోర్టల్‌ను English, Kannada, Telugu, Hindi భాషల మధ్య మార్చండి.",
     panLabel: "PAN",
@@ -162,7 +162,7 @@ const uiText = {
   hi: {
     pageTitle: "अपना रिफंड ट्रैक करें",
     pageSubtitle: "केंद्रीय डाटासेट से नवीनतम कार्यालय-अपलोड की गई स्थिति पाने के लिए PAN और असेसमेंट ईयर दर्ज करें।",
-    backendChip: "Firebase आधारित",
+    backendChip: "रियल टाइम में अपडेट किया गया",
     languageTitle: "भाषा चुनें",
     languageSubtitle: "क्लाइंट पोर्टल को English, Kannada, Telugu और Hindi में बदलें।",
     panLabel: "PAN",
